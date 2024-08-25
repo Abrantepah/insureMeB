@@ -112,6 +112,11 @@ def displayPolicies(request):
         categoryId = request.data.get('categoryId')
         companyId = request.data.get('companyId')
         policyId = request.data.get('policyId')
+        
+        policy = InsurancePolicy.objects.all()
+        Insurance_policy_serializer = InsurancePolicySerializer(policy, many=True).data
+        response_data = {'Policies': Insurance_policy_serializer}
+        
  
         if categoryId is not None:
             policy = InsurancePolicy.objects.filter(company__company_category__id=categoryId)
