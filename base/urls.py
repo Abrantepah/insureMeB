@@ -8,11 +8,10 @@ from .views import (
     remove_insurance_policy,
     submit_claim,
     update_claim_status,
-    # Uncomment these if you decide to implement them
-    # getUsersCommunicatedWith,
-    # getChats,
-    # addMessage,
-    # deleteMessage
+    getUsersCommunicatedWith,
+    getChats,
+    addMessage,
+    deleteMessage
 )
 
 urlpatterns = [
@@ -39,9 +38,9 @@ urlpatterns = [
     # Update Claim Status
     path('claims/update-status/', update_claim_status, name='update-claim-status'),
     
-    # Uncomment these if needed
-    # path('users/communicated-with/', getUsersCommunicatedWith, name='users-communicated-with'),
-    # path('chats/', getChats, name='get-chats'),
-    # path('messages/add/', addMessage, name='add-message'),
-    # path('messages/delete/', deleteMessage, name='delete-message'),
+    
+    path('users/communicated-with/', getUsersCommunicatedWith, name='users-communicated-with'),
+    path('chats/', getChats, name='get-chats'),
+    path('messages/add/', addMessage, name='add-message'),
+    path('messages/delete/', deleteMessage, name='delete-message'),
 ]

@@ -283,92 +283,91 @@ def update_claim_status(request):
 
 
 
-
-# @api_view(['GET', 'POST'])
-# def getUsersCommunicatedWith(request, receiverId=None):
-#     try:
-#         if request.method == 'POST':
+@api_view(['GET', 'POST'])
+def getUsersCommunicatedWith(request, receiverId=None):
+    try:
+        if request.method == 'POST':
             
-#             sender_Id = request.data.get('senderId')
-#             receiver_Id = request.data.get('receiverId')
+            sender_Id = request.data.get('senderId')
+            receiver_Id = request.data.get('receiverId')
             
-#             sender = get_object_or_404(Users, id=sender_Id)
-#             receiver = get_object_or_404(Users, id=receiver_Id)
+            sender = get_object_or_404(Users, id=sender_Id)
+            receiver = get_object_or_404(Users, id=receiver_Id)
         
-#              # Fetch messages where sender=sender and receiver=receiver or sender=receiver and receiver=sender
-#             messages = Messages.objects.filter(
-#                 Q(sender=sender, receiver=receiver) | Q(sender=receiver, receiver=sender)
-#             ).order_by('-timestamp').first()
+             # Fetch messages where sender=sender and receiver=receiver or sender=receiver and receiver=sender
+            messages = Messages.objects.filter(
+                Q(sender=sender, receiver=receiver) | Q(sender=receiver, receiver=sender)
+            ).order_by('-timestamp').first()
             
-#             messageSerializer = MessageSerializer(messages).data
-#             return Response(messageSerializer, status=status.HTTP_200_OK)
+            messageSerializer = MessageSerializer(messages).data
+            return Response(messageSerializer, status=status.HTTP_200_OK)
   
-#         receiver = get_object_or_404(Users, id=receiverId)
+        receiver = get_object_or_404(Users, id=receiverId)
         
-#         # Get distinct user IDs from messages where the receiver is either sender or receiver
-#         user_ids = Messages.objects.filter(
-#             Q(receiver=receiver) | Q(sender=receiver)
-#         ).values_list('sender', 'receiver').distinct()
+        # Get distinct user IDs from messages where the receiver is either sender or receiver
+        user_ids = Messages.objects.filter(
+            Q(receiver=receiver) | Q(sender=receiver)
+        ).values_list('sender', 'receiver').distinct()
 
-#         # Flatten the list and remove the receiver's own ID
-#         user_ids = set([user_id for pair in user_ids for user_id in pair if user_id != receiver.id])
+        # Flatten the list and remove the receiver's own ID
+        user_ids = set([user_id for pair in user_ids for user_id in pair if user_id != receiver.id])
         
-#         return Response(list(user_ids), status=status.HTTP_200_OK)
-#     except Exception as e:
-#         return Response({'error': 'could not get user IDs'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(list(user_ids), status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': 'could not get user IDs'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# @api_view(['GET'])
-# def getChats(request, senderId=None, receiverId=None):
-#     try:
-#         sender = get_object_or_404(Users, id=senderId)
-#         receiver = get_object_or_404(Users, id=receiverId)
+@api_view(['GET'])
+def getChats(request, senderId=None, receiverId=None):
+    try:
+        sender = get_object_or_404(Users, id=senderId)
+        receiver = get_object_or_404(Users, id=receiverId)
         
-#         # Fetch messages where sender=sender and receiver=receiver or sender=receiver and receiver=sender
-#         messages = Messages.objects.filter(
-#             Q(sender=sender, receiver=receiver) | Q(sender=receiver, receiver=sender)
-#         ).order_by('timestamp')
+        # Fetch messages where sender=sender and receiver=receiver or sender=receiver and receiver=sender
+        messages = Messages.objects.filter(
+            Q(sender=sender, receiver=receiver) | Q(sender=receiver, receiver=sender)
+        ).order_by('timestamp')
         
-#         for message in messages:
-#             message.readStatus = True
-#             message.save()
+        for message in messages:
+            message.readStatus = True
+            message.save()
         
-#         messageSerializer = MessageSerializer(messages, many=True).data
-#         return Response(messageSerializer, status=status.HTTP_200_OK)
-#     except Exception as e:
-#         return Response({'error': 'could not get messages'}, status=status.HTTP_404_NOT_FOUND)
+        messageSerializer = MessageSerializer(messages, many=True).data
+        return Response(messageSerializer, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': 'could not get messages'}, status=status.HTTP_404_NOT_FOUND)
      
 
-# @api_view(['POST'])
-# def addMessage(request):
-#     if request.method == 'POST':
-#         senderId = request.data.get('senderId')
-#         receiverId = request.data.get('receiverId')
-#         message = request.data.get('message')
+@api_view(['POST'])
+def addMessage(request):
+    if request.method == 'POST':
+        senderId = request.data.get('senderId')
+        receiverId = request.data.get('receiverId')
+        message = request.data.get('message')
         
-#         sender = get_object_or_404(Users, id=senderId)
-#         receiver = get_object_or_404(Users, id=receiverId)
+        sender = get_object_or_404(Users, id=senderId)
+        receiver = get_object_or_404(Users, id=receiverId)
        
-#         message = Messages.objects.create(sender=sender, receiver=receiver, message=message)
-#         message.save()
-#         return Response({'message added'}, status=status.HTTP_201_CREATED)
+        message = Messages.objects.create(sender=sender, receiver=receiver, message=message)
+        message.save()
+        return Response({'message added'}, status=status.HTTP_201_CREATED)
         
         
-# @api_view(['POST'])
-# def deleteMessage(request):
-#     if request.method == 'POST':
-#         senderId = request.data.get('senderId')
-#         receiverId = request.data.get('receiverId')
-#         messageId = request.data.get('messageId')
+@api_view(['POST'])
+def deleteMessage(request):
+    if request.method == 'POST':
+        senderId = request.data.get('senderId')
+        receiverId = request.data.get('receiverId')
+        messageId = request.data.get('messageId')
         
-#         sender = get_object_or_404(Users, id=senderId)
-#         receiver = get_object_or_404(Users, id=receiverId)
+        sender = get_object_or_404(Users, id=senderId)
+        receiver = get_object_or_404(Users, id=receiverId)
     
-#         try:
-#             message = Messages.objects.get(id=messageId, sender=sender, receiver=receiver)
-#             message.delete()
-#             return Response({'message deleted'}, status=status.HTTP_200_OK)
-#         except Messages.DoesNotExist():
-#             return Response({'message has been deleted already'}, status=status.HTTP_204_NO_CONTENT)
+        try:
+            message = Messages.objects.get(id=messageId, sender=sender, receiver=receiver)
+            message.delete()
+            return Response({'message deleted'}, status=status.HTTP_200_OK)
+        except Messages.DoesNotExist():
+            return Response({'message has been deleted already'}, status=status.HTTP_204_NO_CONTENT)
 
         
