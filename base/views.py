@@ -34,7 +34,7 @@ class UserLoginAPIView(APIView):
             login(request, user)
             if Users.objects.filter(user=user).exists():
                 user_data = Users.objects.get(user=user)
-                user_serializer =  UserSerializer(user_data)
+                user_serializer =  UsersSerializer(user_data)
                 return Response(user_serializer.data, status=status.HTTP_200_OK)
             else:
                 error_message = 'User data not found'
