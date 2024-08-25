@@ -26,6 +26,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InsurancePolicySerializer(serializers.ModelSerializer):
+    company = CompanySerializer()
     class Meta:
         model = InsurancePolicy
         fields = '__all__'
