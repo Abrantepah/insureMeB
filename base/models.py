@@ -64,6 +64,7 @@ class InsurancePolicy(models.Model):
 
 class Claim(models.Model):
     policy = models.ForeignKey(InsurancePolicy, on_delete=models.PROTECT)
+    # title = models.CharField(max_length=100)
     claimant = models.ForeignKey(Users, on_delete=models.PROTECT, related_name='claims')
     claim_number = models.CharField(max_length=50, unique=True)
     description = models.TextField()

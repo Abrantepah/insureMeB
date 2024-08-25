@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 from django.utils import timezone
+from django.contrib.auth import authenticate, login
 
 from .models import (
 Users, UserPolicies, Category, Company, InsurancePolicy, Claim,  Messages, Payment
