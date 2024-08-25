@@ -4,6 +4,7 @@ from .views import (
     categories,
     users_policies,
     displayPolicies,
+    joinPolicy,
     add_insurance_policy,
     remove_insurance_policy,
     submit_claim,
@@ -25,6 +26,9 @@ urlpatterns = [
     
     # Display Policies
     path('policies/display/', displayPolicies, name='display-policies'),
+    
+    # User join Policy
+    path('join-policy/', joinPolicy, name='join-policy'),
     
     # Add Insurance Policy
     path('policies/add/', add_insurance_policy, name='add-insurance-policy'),

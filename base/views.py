@@ -104,6 +104,26 @@ def users_policies(request, userId):
 
 
 
+# join policy
+@api_view(['POST'])
+def joinPolicy(request):
+    if request.method == 'POST':
+        userId = request.data.get('userId')
+        policyId = request.data.get('policyId')
+       
+        user =  get_object_or_404(Users, id=userId)
+        policy = get_object_or_404(InsurancePolicy, id=policyId)
+        
+        try:
+           join_policy = UserPolicies.objects.get(policy=policy, user=user)
+           return Response({'User has already joined this policy'}, status=status.HTTP_302_FOUND)
+        except join_policy.DoesNotExist:
+           join_policy = UserPolicies.objects.create(policy=policy, user=user)
+           join_policy.save()
+           return Response({'you have now joined this policy'}, status=status.HTTP_201_CREATED)
+           
+
+
 #display services based on the category and subcategory
 @api_view(['POST'])
 def displayPolicies(request):
