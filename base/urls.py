@@ -27,7 +27,7 @@ urlpatterns = [
     
     # Display Policies
     path('policies/display/', displayPolicies, name='display-policies'),
-    
+
     # User join Policy
     path('join-policy/', joinPolicy, name='join-policy'),
     

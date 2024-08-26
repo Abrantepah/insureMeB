@@ -10,11 +10,6 @@ class UsersSerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1  # Includes related fields
 
-class UserPoliciesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserPolicies
-        fields = '__all__'
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -30,6 +25,12 @@ class InsurancePolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = InsurancePolicy
         fields = '__all__'
+
+class UserPoliciesSerializer(serializers.ModelSerializer):
+    policy = InsurancePolicySerializer()
+    class Meta:
+        model = UserPolicies
+        fields = '__all__'        
 
 class ClaimSerializer(serializers.ModelSerializer):
     class Meta:
