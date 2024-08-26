@@ -11,6 +11,7 @@ from rest_framework.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import (
 Users, UserPolicies, Category, Company, InsurancePolicy, Claim,  Messages, Payment
@@ -105,23 +106,26 @@ def users_policies(request, userId):
 
 
 # join policy
+@csrf_exempt  # Disables CSRF protection for this view
 @api_view(['POST'])
 def joinPolicy(request):
     if request.method == 'POST':
         userId = request.data.get('userId')
         policyId = request.data.get('policyId')
        
-        user =  get_object_or_404(Users, id=userId)
+        user = get_object_or_404(Users, id=userId)
         policy = get_object_or_404(InsurancePolicy, id=policyId)
         
         try:
-           join_policy = UserPolicies.objects.get(policy=policy, user=user)
-           return Response({'User has already joined this policy'}, status=status.HTTP_302_FOUND)
-        except join_policy.DoesNotExist:
-           join_policy = UserPolicies.objects.create(policy=policy, user=user)
-           join_policy.save()
-           return Response({'you have now joined this policy'}, status=status.HTTP_201_CREATED)
-           
+            # Check if the user is already part of the policy
+            join_policy = UserPolicies.objects.get(policy=policy, user=user)
+            return Response({'detail': 'User has already joined this policy'}, status=status.HTTP_302_FOUND)
+        except UserPolicies.DoesNotExist:
+            # If the user is not part of the policy, create the association
+            join_policy = UserPolicies.objects.create(policy=policy, user=user)
+            join_policy.save()
+            return Response({'detail': 'You have now joined this policy'}, status=status.HTTP_201_CREATED)
+
 
 
 #display services based on the category and subcategory
@@ -233,6 +237,18 @@ def remove_insurance_policy(request):
         else:
             return Response({'error': 'You are not verified'}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+
+@api_view(["GET"])
+def get_claims(request, userId):
+    user = get_object_or_404(Users, id=userId)
+    
+    if user:
+        claim = Claim.objects.filter(claimant=user)
+        response = ClaimSerializer(claim, many=True).data
+        return Response(response, status=status.HTTP_200_OK)
+    
+    return Response({"error user authentication"},  status=status.HTTP_401_UNAUTHORIZED)
 
 
 # make insurance claim 

@@ -7,6 +7,7 @@ from .views import (
     joinPolicy,
     add_insurance_policy,
     remove_insurance_policy,
+    get_claims,
     submit_claim,
     update_claim_status,
     getUsersCommunicatedWith,
@@ -35,6 +36,8 @@ urlpatterns = [
     
     # Remove Insurance Policy
     path('policies/remove/', remove_insurance_policy, name='remove-insurance-policy'),
+    
+    path('get-claims/<int:userId>/', get_claims, name='get-claims'),
     
     # Submit Claim
     path('claims/submit/', submit_claim, name='submit-claim'),
