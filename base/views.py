@@ -63,7 +63,7 @@ def users_policies(request, userId):
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
     
     try:
-        policies = UserPolicies.objects.filter(user=user.user)  # Adjust for the relationship
+        policies = UserPolicies.objects.filter(user=user)  # Adjust for the relationship
 
         # Categorize policies and count them
         active_policies = []
@@ -117,7 +117,7 @@ def joinPolicy(request):
         
         try:
             # Check if the user is already part of the policy
-            join_policy = UserPolicies.objects.filter(policy=policy, user=user)
+            join_policy = UserPolicies.objects.get(policy=policy, user=user)
             return Response({'detail': 'User has already joined this policy'}, status=status.HTTP_302_FOUND)
         except UserPolicies.DoesNotExist:
             # If the user is not part of the policy, create the association
