@@ -130,35 +130,28 @@ def joinPolicy(request):
 #display services based on the category and subcategory
 @api_view(['POST'])
 def displayPolicies(request):
-    categoryId = None
     response_data = {}
-    if request.method == "POST":
-        categoryId = request.data.get('categoryId')
-        companyId = request.data.get('companyId')
-        policyId = request.data.get('policyId')
-        
-        policy = InsurancePolicy.objects.all()
-        Insurance_policy_serializer = InsurancePolicySerializer(policy, many=True).data
-        response_data = {'Policies': Insurance_policy_serializer}
-        
- 
-        if categoryId is not None:
-            policy = InsurancePolicy.objects.filter(company__company_category__id=categoryId)
-            Insurance_policy_serializer = InsurancePolicySerializer(policy, many=True).data
-            response_data = {'Policies': Insurance_policy_serializer}
-        
-        if companyId is not None:
-            policy = InsurancePolicy.objects.filter(company__id=companyId)
-            Insurance_policy_serializer = InsurancePolicySerializer(policy, many=True).data
-            response_data = {'Policies': Insurance_policy_serializer}   
-            
-        if policyId is not None:
-            policy = InsurancePolicy.objects.filter(id=policyId)
-            Insurance_policy_serializer = InsurancePolicySerializer(policy).data
-            response_data = {'Policies': Insurance_policy_serializer}     
+    policies = InsurancePolicy.objects.all()
+
+    # Handle filtering based on the POST data
+    categoryId = request.data.get('categoryId')
+    companyId = request.data.get('companyId')
+    policyId = request.data.get('policyId')
+
+    if categoryId:
+        policies = policies.filter(company__company_category__id=categoryId)
+
+    if companyId:
+        policies = policies.filter(company__id=companyId)
+
+    if policyId:
+        policies = policies.filter(id=policyId)
+
+    # Serialize the filtered policies
+    insurance_policy_serializer = InsurancePolicySerializer(policies, many=True)
+    response_data = {'Policies': insurance_policy_serializer.data}
 
     return Response(response_data, status=status.HTTP_200_OK)
-
 
 
 
@@ -266,7 +259,7 @@ def submit_claim(request):
         policy = get_object_or_404(InsurancePolicy, id=policyId)
 
         # Ensure that the claimant is associated with the policy
-        if not UserPolicies.objects.filter(user=claimant.user, policy=policy).exists():
+        if not UserPolicies.objects.filter(user=claimant, policy=policy).exists():
             return Response({'error': 'User is not associated with this policy'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate a unique claim number
