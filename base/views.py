@@ -105,8 +105,7 @@ def users_policies(request, userId):
 
 
 
-# join policy
-@csrf_exempt  # Disables CSRF protection for this view
+
 @api_view(['POST'])
 def joinPolicy(request):
     if request.method == 'POST':
@@ -118,7 +117,7 @@ def joinPolicy(request):
         
         try:
             # Check if the user is already part of the policy
-            join_policy = UserPolicies.objects.get(policy=policy, user=user)
+            join_policy = UserPolicies.objects.filter(policy=policy, user=user)
             return Response({'detail': 'User has already joined this policy'}, status=status.HTTP_302_FOUND)
         except UserPolicies.DoesNotExist:
             # If the user is not part of the policy, create the association

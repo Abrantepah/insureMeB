@@ -82,6 +82,7 @@ class UserPolicies(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     policy = models.ForeignKey(InsurancePolicy, on_delete=models.PROTECT)
     # document = models.FileField(upload_to='documents/', null=True, blank=True)
+    # creation_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[('Active', 'Active'), ('On Pause', 'On Pause'), ('Complete', 'Complete')], default='Active')
    
 
