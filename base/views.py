@@ -259,6 +259,7 @@ def submit_claim(request):
         policyId = request.data.get('policyId')
         description = request.data.get('description')
         claim_amount = request.data.get('claim_amount')
+        title = request.data.get('title')
 
         # Fetch the user (claimant) and insurance policy instances
         claimant = get_object_or_404(Users, id=userId)
@@ -275,6 +276,7 @@ def submit_claim(request):
             # Create the claim with status set to "Pending"
             claim = Claim.objects.create(
                 policy=policy,
+                title=title,
                 claimant=claimant,
                 claim_number=claim_number,
                 description=description,
