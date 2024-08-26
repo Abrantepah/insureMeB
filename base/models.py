@@ -13,7 +13,7 @@ class Users(models.Model):
     
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.username}"
      
 
 
@@ -64,7 +64,7 @@ class InsurancePolicy(models.Model):
 
 class Claim(models.Model):
     policy = models.ForeignKey(InsurancePolicy, on_delete=models.PROTECT)
-    # title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     claimant = models.ForeignKey(Users, on_delete=models.PROTECT, related_name='claims')
     claim_number = models.CharField(max_length=50, unique=True)
     description = models.TextField()
@@ -79,10 +79,10 @@ class Claim(models.Model):
 
 
 class UserPolicies(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(Users, on_delete=models.PROTECT)
     policy = models.ForeignKey(InsurancePolicy, on_delete=models.PROTECT)
-    # document = models.FileField(upload_to='documents/', null=True, blank=True)
-    # creation_date = models.DateTimeField(auto_now_add=True)
+    document = models.FileField(upload_to='documents/', null=True, blank=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[('Active', 'Active'), ('On Pause', 'On Pause'), ('Complete', 'Complete')], default='Active')
    
 
