@@ -239,10 +239,11 @@ def remove_insurance_policy(request):
 
 
 
+
+
 @api_view(["GET"])
 def get_claims(request, userId):
     user = get_object_or_404(Users, id=userId)
-    
     if user:
         claim = Claim.objects.filter(claimant=user)
         response = ClaimSerializer(claim, many=True).data
