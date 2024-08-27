@@ -67,7 +67,7 @@ class Claim(models.Model):
     claimant = models.ForeignKey(Users, on_delete=models.PROTECT, related_name='claims')
     claim_number = models.CharField(max_length=50, unique=True)
     description = models.TextField()
-    claim_amount = models.DecimalField(max_digits=15, decimal_places=2)
+    claim_amount = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Approved', 'Approved'), ('Denied', 'Denied')], default='Pending')
     claim_date = models.DateField(auto_now_add=True)
     approval_date = models.DateField(null=True, blank=True)
