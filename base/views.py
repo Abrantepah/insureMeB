@@ -12,7 +12,7 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
-
+from .ai_logic import get_chatbot_response
 from .models import (
 Users, UserPolicies, Category, Company, InsurancePolicy, Claim,  Messages, Payment
 )
@@ -44,6 +44,34 @@ class UserLoginAPIView(APIView):
             error_message = 'Invalid login credentials'
             return Response({'error': error_message}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+
+@api_view(['POST'])
+def chatbot_interact(request):
+    if request.method == 'POST':
+        user_input = request.data.get('user_input')
+        response = get_chatbot_response(user_input)
+        return Response(response, status=status.HTTP_200_OK)
+    return Response({"error": "Invalid request method"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+# @api_view(['GET'])
+# def get_simple_subcategories(request):
+#     # Filter subcategories that are used in Services
+#     used_categories = Category.objects.filter(services__isnull=False).distinct()
+
+#     # Serialize the filtered subcategories
+#     category_serializer = CategorySerializer(used_categories, many=True).data
+    
+#     response = used_categories
+#         #save the response in the subcategories.json file 
+        
+#     with open('categories.json', 'w') as file:
+#         json.dump(response.json(), file)
+    
+#     return Response(category_serializer, status=status.HTTP_200_OK)
 
 
 # list main categories

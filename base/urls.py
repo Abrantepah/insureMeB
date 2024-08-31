@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     UserLoginAPIView,
+    chatbot_interact,
     categories,
     users_policies,
     displayPolicies,
@@ -18,6 +19,8 @@ from .views import (
 
 urlpatterns = [
     path('login/', UserLoginAPIView.as_view(), name='user-login'),
+    
+    path('chatbot-interaction/', chatbot_interact, name='chatbot-interation'),
     
     # Categories
     path('categories/', categories, name='list-categories'),

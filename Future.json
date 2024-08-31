@@ -1,0 +1,22 @@
+[
+    {
+        "tag": "Business",
+        "patterns": [
+            "I want insurance policy on media"
+        ],
+        "responses": [
+            "Here is a list of insurance policies that can help with media-related risks and liabilities."
+        ],
+        "subcat": "Business"
+    },
+    {
+        "tag": "Travel",
+        "patterns": [
+            "I want a traveling agency for insurances"
+        ],
+        "responses": [
+            "Here is a list of insurance agencies that specialize in travel insurance and can help you find the right coverage for your next trip."
+        ],
+        "subcat": "Travel"
+    }
+]
