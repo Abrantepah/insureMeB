@@ -127,7 +127,7 @@ def get_policies(policyId):
         response_data = None
         policies = InsurancePolicy.objects.all()
         if policyId is not None:
-            policies = policies.filter(id=policyId) 
+            policies = policies.filter(company__company_category=policyId) 
             policy_serializer = InsurancePolicySerializer(policies, many=True).data
             response_data = {'policies': policy_serializer}
         # response = requests.post(f'{BASE_URL}api/displayServices/', data={'subcategoryId': subcategoryId})
