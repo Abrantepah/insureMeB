@@ -284,12 +284,16 @@ def submit_claim(request):
 
         # Fetch the user (claimant) and insurance policy instances
         claimant = get_object_or_404(Users, id=userId)
-        policy = get_object_or_404(InsurancePolicy, id=policyId)
+        policy = InsurancePolicy.objects.get(id=policyId)
+        # policy = get_object_or_404(InsurancePolicy, id=policyId)
 
         # Ensure that the claimant is associated with the policy
         if not UserPolicies.objects.filter(user=claimant, policy=policy).exists():
             return Response({'error': 'User is not associated with this policy'}, status=status.HTTP_400_BAD_REQUEST)
 
+        if Claim.objects.filter(claimant=claimant, policy=policy, status='Pending').exists():
+            return Response({'error': 'Claim is already pending respone, please wait'}, status=status.HTTP_400_BAD_REQUEST)
+        
         # Generate a unique claim number
         claim_number = get_random_string(length=10).upper()
 
