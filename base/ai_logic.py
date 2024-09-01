@@ -129,7 +129,7 @@ def get_policies(policyId):
         if policyId is not None:
             policies = policies.filter(id=policyId) 
             policy_serializer = InsurancePolicySerializer(policies, many=True).data
-            response_data = {'services': policy_serializer}
+            response_data = {'policies': policy_serializer}
         # response = requests.post(f'{BASE_URL}api/displayServices/', data={'subcategoryId': subcategoryId})
         # response.raise_for_status()
         # response = response_data
